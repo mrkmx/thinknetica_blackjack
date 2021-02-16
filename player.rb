@@ -1,4 +1,6 @@
 class Player
+  attr_accessor :money
+
   def initialize(name)
     @name = name
     @cards = []
