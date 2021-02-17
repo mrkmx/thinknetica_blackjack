@@ -1,5 +1,7 @@
 require_relative "player"
 require_relative "bank"
+require_relative "deck"
+
 
 class Game
   BASE_BET = 10
@@ -12,6 +14,7 @@ class Game
     @player = Player.new player_name
     @dealer = Player.new "Дилер"
     @bank = Bank.new
+    @deck = Deck.new
   end
 
   def start
