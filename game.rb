@@ -19,6 +19,7 @@ class Game
 
   def start
     place_bets
+    deal_cards
   end
 
   def place_bets
@@ -26,5 +27,10 @@ class Game
     @dealer.money=(@dealer.money - BASE_BET)
     
     @bank.money=(@bank.money + (BASE_BET * 2))
+  end
+
+  def deal_cards
+    2.times { @player.take_card @deck }
+    2.times { @dealer.take_card @deck }
   end
 end

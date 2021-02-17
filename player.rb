@@ -8,4 +8,11 @@ class Player
     @score = 0
   end
 
+  def take_card deck
+    card = deck.cards.sample
+    deck.cards.delete card
+
+    @cards << card
+  end
+
 end
