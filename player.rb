@@ -13,6 +13,15 @@ class Player
     deck.cards.delete card
 
     @cards << card
+    add_score card
+  end
+
+  def add_score card
+    if card.ace && card.score + @score > 21
+      @score += 1
+    else
+      @score += card.score
+    end
   end
 
 end
