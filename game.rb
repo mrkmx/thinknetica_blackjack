@@ -12,11 +12,9 @@ class Game
     @player = Player.new player_name
     @dealer = Player.new "Дилер"
     @bank = Bank.new
-
-    start_game
   end
 
-  def start_game
+  def start
     place_bets
   end
 
