@@ -96,13 +96,19 @@ class Game
 
   def winner
     if @dealer.score <= GAME_GOAL && @dealer.score > @player.score
-      puts "Победил #{@dealer.name}, (#{@dealer.score} VS #{@player.score})"
+      puts "Победил #{@dealer.name}"
+      puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+      puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
       reward @dealer
     elsif @player.score <= GAME_GOAL && @player.score > @dealer.score
-      puts "Победил #{@player.name}, (#{@player.score} VS #{@dealer.score})"
+      puts "Победил #{@player.name}"
+      puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
+      puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
       reward @player
     elsif @player.score == @dealer.score
-      puts "Ничья, (#{@player.score} VS #{@dealer.score})"
+      puts "Ничья"
+      puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
+      puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
       reward @player, @dealer
     end
     continue
