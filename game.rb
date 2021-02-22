@@ -42,6 +42,7 @@ class Game
   end
 
   def status
+    puts "========================="
     puts "#{@player.name}: #{@player.card_names}"
     puts "Очки: #{@player.score}, Деньги: #{@player.money}"
     puts "========================="
@@ -52,8 +53,14 @@ class Game
 
   def dealer_actions
     if @dealer.score >= DEALER_THRESHOLD
-      user_actions
+      puts "========================="
+      puts "Дилер пропускает ход"
+      puts "========================="
+      output
     else
+      puts "========================="
+      puts "Дилер берет карту"
+      puts "========================="
       @dealer.take_card @deck
       output
     end
