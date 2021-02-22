@@ -91,6 +91,7 @@ class Game
       @dealer.take_card @deck
       output
     end
+    winner if max_cards? @dealer
   end
 
   def winner
