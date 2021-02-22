@@ -11,7 +11,7 @@ class Player
     @score = 0
   end
 
-  def take_card deck
+  def take_card(deck)
     card = deck.cards.sample
     deck.cards.delete card
 
@@ -36,10 +36,10 @@ class Player
   end
 
   def card_names
-    @cards.each {|card| print "#{card.name} "}
+    @cards.each { |card| print "#{card.name} " }
   end
 
   def card_hidden_names
-    @cards.each {|card| print "** "}
+    @cards.each { print '** ' }
   end
 end
