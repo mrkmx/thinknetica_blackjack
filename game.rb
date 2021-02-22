@@ -31,6 +31,7 @@ class Game
     input = gets.chomp
     if input == "y"
       [@player, @dealer].each {|user| user.remove_cards}
+      [@player, @dealer].each {|user| user.remove_score}
       start
     elsif input == "n"
       puts "Завершение игры"
@@ -94,14 +95,14 @@ class Game
 
   def winner
     if @dealer.score <= GAME_GOAL && @dealer.score > @player.score
-      reward @dealer
       puts "Победил #{@dealer.name}, (#{@dealer.score} VS #{@player.score})"
+      reward @dealer
     elsif @player.score <= GAME_GOAL && @player.score > @dealer.score
-      reward @player
       puts "Победил #{@player.name}, (#{@player.score} VS #{@dealer.score})"
+      reward @player
     elsif @player.score == @dealer.score
-      reward @player, @dealer
       puts "Ничья, (#{@player.score} VS #{@dealer.score})"
+      reward @player, @dealer
     end
     continue
   end
@@ -113,7 +114,7 @@ class Game
         @bank.money= 0
       end
     else # 1 победитель
-      user.money=(user.money + @bank.money)
+      user[0].money=(user[0].money + @bank.money)
       @bank.money= 0
     end
   end

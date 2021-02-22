@@ -21,6 +21,10 @@ class Player
     @cards = []
   end
 
+  def remove_score
+    @score = 0
+  end
+
   def add_score card
     if card.ace && card.score + @score > 21
       @score += 1
