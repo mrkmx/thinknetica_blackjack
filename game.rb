@@ -74,11 +74,12 @@ class Game
     puts "Очки: #{@player.score}, Деньги: #{@player.money}"
     puts "========================="
     puts "#{@dealer.name}: #{@dealer.card_hidden_names}"
-    puts "Деньги: #{@dealer.money}"
+    puts "Очки: #{@dealer.score}, Деньги: #{@dealer.money}"
     puts "========================="
   end
 
   def dealer_actions
+    winner if max_cards? @dealer
     if @dealer.score >= DEALER_THRESHOLD
       puts "========================="
       puts "Дилер пропускает ход"
@@ -91,16 +92,15 @@ class Game
       @dealer.take_card @deck
       output
     end
-    winner if max_cards? @dealer
   end
 
   def winner
-    if @dealer.score <= GAME_GOAL && @dealer.score > @player.score
+    if (@dealer.score <= GAME_GOAL && @dealer.score > @player.score) || @player.score > GAME_GOAL
       puts "Победил #{@dealer.name}"
       puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
       puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
       reward @dealer
-    elsif @player.score <= GAME_GOAL && @player.score > @dealer.score
+    elsif (@player.score <= GAME_GOAL && @player.score > @dealer.score) || @dealer.score > GAME_GOAL
       puts "Победил #{@player.name}"
       puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
       puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
