@@ -1,11 +1,11 @@
-require_relative "card"
+require_relative 'card'
 
 class Deck
   attr_reader :cards
 
   RANKS = %w[2 3 4 5 6 7 8 9 10 J Q K A].freeze
   SUITS = %w[♣ ♦ ♥ ♠].freeze
-  
+
   def initialize
     @cards = []
     create
@@ -24,14 +24,14 @@ class Deck
     end
   end
 
-  def card_score rank
-    return 10 if %w[J Q K].include? rank 
-    return 11 if rank == "A"
+  def card_score(rank)
+    return 10 if %w[J Q K].include? rank
+    return 11 if rank == 'A'
+
     rank.to_i
   end
 
-  def ace? rank
-    rank == "A"
+  def ace?(rank)
+    rank == 'A'
   end
-
 end
