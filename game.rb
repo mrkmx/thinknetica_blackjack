@@ -16,13 +16,38 @@ class Game
     @player = Player.new player_name
     @dealer = Player.new "Дилер"
     @bank = Bank.new
-    @deck = Deck.new
   end
 
   def start
+    @deck = Deck.new
     place_bets
     deal_cards
     output
+  end
+
+  def continue
+    over?
+    puts "Продолжить? (y/n)"
+    input = gets.chomp
+    if input == "y"
+      [@player, @dealer].each {|user| user.remove_cards}
+      start
+    elsif input == "n"
+      puts "Завершение игры"
+      exit
+    else
+      puts "Неизвестная команда"
+      continue
+    end
+  end
+
+  def over?
+    [@player, @dealer].each do |user|
+      if user.money < BASE_BET
+        puts "#{user.name} не может сделать ставку, игра окончена"
+        exit
+      end
+    end
   end
 
   def place_bets
@@ -78,6 +103,7 @@ class Game
       reward @player, @dealer
       puts "Ничья, (#{@player.score} VS #{@dealer.score})"
     end
+    continue
   end
 
   def reward *user
