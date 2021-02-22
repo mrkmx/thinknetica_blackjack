@@ -1,5 +1,6 @@
 class Player
   attr_accessor :money
+  attr_reader :name, :score, :cards
 
   def initialize(name)
     @name = name
@@ -24,4 +25,11 @@ class Player
     end
   end
 
+  def card_names
+    @cards.each {|card| print "#{card.name} "}
+  end
+
+  def card_hidden_names
+    @cards.each {|card| print "** "}
+  end
 end
