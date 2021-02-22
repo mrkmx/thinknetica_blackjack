@@ -27,12 +27,12 @@ class Player
     @score = 0
   end
 
-  def add_score card
-    if card.ace && card.score + @score > 21
-      @score += 1
-    else
-      @score += card.score
-    end
+  def add_score(card)
+    @score += if card.ace && card.score + @score > 21
+                1
+              else
+                card.score
+              end
   end
 
   def card_names
