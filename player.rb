@@ -2,10 +2,12 @@ class Player
   attr_accessor :money
   attr_reader :name, :score, :cards
 
+  INIT_AMOUNT = 100
+
   def initialize(name)
     @name = name
     @cards = []
-    @money = 100
+    @money = INIT_AMOUNT
     @score = 0
   end
 
