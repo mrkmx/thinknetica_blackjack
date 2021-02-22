@@ -79,17 +79,18 @@ class Game
   end
 
   def dealer_actions
-    winner if max_cards? @dealer
     if @dealer.score >= DEALER_THRESHOLD
       puts "========================="
       puts "Дилер пропускает ход"
       puts "========================="
+      winner if @dealer.score >= GAME_GOAL
       output
     else
       puts "========================="
       puts "Дилер берет карту"
       puts "========================="
       @dealer.take_card @deck
+      winner if max_cards? @dealer
       output
     end
   end
@@ -147,6 +148,7 @@ class Game
           user_actions
         end
         @player.take_card @deck
+        winner if @player.score >= GAME_GOAL
         dealer_actions
       else
         puts "Неизвестная команда"
