@@ -11,9 +11,8 @@ class Game
   GAME_GOAL = 21
 
   def initialize
-    # puts "Введите своё имя"
-    # player_name = gets.chomp
-    player_name = 'mrkmx'
+    puts "Введите своё имя"
+    player_name = gets.chomp
 
     @player = Player.new player_name
     @dealer = Player.new 'Дилер'
@@ -81,7 +80,7 @@ class Game
     puts "Очки: #{@player.score}, Деньги: #{@player.money}"
     puts '========================='
     puts "#{@dealer.name}: #{@dealer.card_hidden_names}"
-    puts "Очки: #{@dealer.score}, Деньги: #{@dealer.money}"
+    puts "Деньги: #{@dealer.money}"
     puts '========================='
   end
 
