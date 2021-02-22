@@ -5,4 +5,6 @@ Style/ClassVars:
 Style/AsciiComments:
   Enabled: false
 Metrics/MethodLength:
-  Max: 15
+  Max: 25
+Metrics/ClassLength:
+  Max: 160

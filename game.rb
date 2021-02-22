@@ -34,7 +34,7 @@ class Game
     input = gets.chomp
     if input == 'y'
       @users.each do |user|
-        user.remove_cards 
+        user.remove_cards
         user.remove_score
       end
       start
@@ -86,40 +86,51 @@ class Game
   end
 
   def dealer_actions
+    puts '========================='
     if @dealer.score >= DEALER_THRESHOLD
-      puts '========================='
       puts 'Дилер пропускает ход'
-      puts '========================='
       winner if @dealer.score >= GAME_GOAL
-      output
     else
-      puts '========================='
       puts 'Дилер берет карту'
-      puts '========================='
       @dealer.take_card @deck
       winner if max_cards? @dealer
-      output
     end
+    output
+    puts '========================='
   end
 
   def winner
-    if (@dealer.score <= GAME_GOAL && @dealer.score > @player.score) || @player.score > GAME_GOAL
-      puts "Победил #{@dealer.name}"
-      puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
-      puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
-      reward @dealer
-    elsif (@player.score <= GAME_GOAL && @player.score > @dealer.score) || @dealer.score > GAME_GOAL
-      puts "Победил #{@player.name}"
-      puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
-      puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
-      reward @player
-    elsif @player.score == @dealer.score
-      puts 'Ничья'
-      puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
-      puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
-      reward @player, @dealer
-    end
+    dealer_win
+    player_win
+    draw
     continue
+  end
+
+  def dealer_win
+    return unless (@dealer.score <= GAME_GOAL && @dealer.score > @player.score) || @player.score > GAME_GOAL
+
+    puts "Победил #{@dealer.name}"
+    puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+    puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
+    reward @dealer
+  end
+
+  def player_win
+    return unless (@player.score <= GAME_GOAL && @player.score > @dealer.score) || @dealer.score > GAME_GOAL
+
+    puts "Победил #{@player.name}"
+    puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
+    puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+    reward @player
+  end
+
+  def draw
+    return unless @player.score == @dealer.score
+
+    puts 'Ничья'
+    puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
+    puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+    reward @player, @dealer
   end
 
   def reward(*user)
@@ -148,19 +159,23 @@ class Game
     when 2
       winner
     when 3
-      begin
-        raise 'Взято максимальное количество карт' if max_cards? @player
-      rescue RuntimeError => e
-        puts e.message
-        user_actions
-      end
-      @player.take_card @deck
-      winner if @player.score >= GAME_GOAL
-      dealer_actions
+      take_player_card
     else
       puts 'Неизвестная команда'
       user_actions
     end
+  end
+
+  def take_player_card
+    begin
+      raise 'Взято максимальное количество карт' if max_cards? @player
+    rescue RuntimeError => e
+      puts e.message
+      user_actions
+    end
+    @player.take_card @deck
+    winner if @player.score >= GAME_GOAL
+    dealer_actions
   end
 
   def max_cards?(user)
