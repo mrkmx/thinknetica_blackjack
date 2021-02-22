@@ -5,6 +5,7 @@ class Player
   attr_reader :name, :score, :cards
 
   INIT_AMOUNT = 100
+  GAME_GOAL = 21
 
   def initialize(name)
     @name = name
@@ -30,7 +31,7 @@ class Player
   end
 
   def add_score(card)
-    @score += if card.ace && card.score + @score > 21
+    @score += if card.ace && card.score + @score > GAME_GOAL
                 1
               else
                 card.score
