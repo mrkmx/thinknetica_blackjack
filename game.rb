@@ -6,6 +6,7 @@ class Game
   BASE_BET = 10
   MAX_CARDS = 3
   DEALER_THRESHOLD = 17
+  GAME_GOAL = 21
 
   def initialize
     # puts "Введите своё имя"
@@ -67,7 +68,25 @@ class Game
   end
 
   def winner
-    
+    if @dealer.score <= GAME_GOAL && @dealer.score > @player.score
+      reward @dealer
+    elsif @player.score <= GAME_GOAL && @player.score > @dealer.score
+      reward @player
+    elsif @player.score == @dealer.score
+      reward @player, @dealer
+    end
+  end
+
+  def reward *user
+    if user.length > 1 # Ничья
+      user.each do |u|
+        u.money=(u.money + BASE_BET)
+        @bank.money= 0
+      end
+    else # 1 победитель
+      user.money=(user.money + @bank.money)
+      @bank.money= 0
+    end
   end
 
   def user_actions
