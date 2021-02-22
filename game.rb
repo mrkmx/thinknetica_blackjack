@@ -18,6 +18,7 @@ class Game
     @player = Player.new player_name
     @dealer = Player.new 'Дилер'
     @bank = Bank.new
+    @users = [@player, @dealer]
   end
 
   def start
@@ -32,8 +33,10 @@ class Game
     puts 'Продолжить? (y/n)'
     input = gets.chomp
     if input == 'y'
-      [@player, @dealer].each { |user| user.remove_cards }
-      [@player, @dealer].each { |user| user.remove_score }
+      @users.each do |user|
+        user.remove_cards 
+        user.remove_score
+      end
       start
     elsif input == 'n'
       puts 'Завершение игры'
@@ -45,7 +48,7 @@ class Game
   end
 
   def over?
-    [@player, @dealer].each do |user|
+    @users.each do |user|
       if user.money < BASE_BET
         puts "#{user.name} не может сделать ставку, игра окончена"
         exit
@@ -54,15 +57,17 @@ class Game
   end
 
   def place_bets
-    @player.money = (@player.money - BASE_BET)
-    @dealer.money = (@dealer.money - BASE_BET)
+    @users.each do |user|
+      user.money = (user.money - BASE_BET)
+    end
 
     @bank.money = (@bank.money + (BASE_BET * 2))
   end
 
   def deal_cards
-    2.times { @player.take_card @deck }
-    2.times { @dealer.take_card @deck }
+    @users.each do |user|
+      2.times { user.take_card @deck }
+    end
   end
 
   def output
