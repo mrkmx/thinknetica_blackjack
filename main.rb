@@ -2,4 +2,4 @@
 
 require_relative 'terminal_interface'
 
-game = TerminalInterface.new
+TerminalInterface.new

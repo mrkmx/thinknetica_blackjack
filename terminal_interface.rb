@@ -4,18 +4,26 @@ require_relative 'game'
 
 class TerminalInterface
   def initialize
-    puts "Введите своё имя"
+    puts 'Введите своё имя'
     player_name = gets.chomp
-    
+
     @game = Game.new(self, player_name)
     @game.start
   end
 
   def status
+    player_status
+    dealer_status
+  end
+
+  def player_status
     puts '========================='
     puts "#{@game.player.name}: #{@game.player.card_names}"
     puts "Очки: #{@game.player.score}, Деньги: #{@game.player.money}"
     puts '========================='
+  end
+
+  def dealer_status
     puts "#{@game.dealer.name}: #{@game.dealer.card_masked_names}"
     puts "Деньги: #{@game.dealer.money}"
     puts '========================='

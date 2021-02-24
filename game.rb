@@ -31,7 +31,7 @@ class Game
     @users.each do |user|
       if user.money < BASE_BET
         @client.output "#{user.name} не может сделать ставку, игра окончена"
-        exit # ToDo: как это будет работать с другими интерфейсами, кроме терминала?
+        exit # TODO: как это будет работать с другими интерфейсами, кроме терминала?
       end
     end
   end
