@@ -79,7 +79,7 @@ class Game
     puts "#{@player.name}: #{@player.card_names}"
     puts "Очки: #{@player.score}, Деньги: #{@player.money}"
     puts '========================='
-    puts "#{@dealer.name}: #{@dealer.card_hidden_names}"
+    puts "#{@dealer.name}: #{@dealer.card_masked_names}"
     puts "Деньги: #{@dealer.money}"
     puts '========================='
   end

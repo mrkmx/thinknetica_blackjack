@@ -39,10 +39,10 @@ class Player
   end
 
   def card_names
-    @cards.each { |card| print "#{card.name} " }
+    @cards.map(&:name).join(' ')
   end
 
-  def card_hidden_names
-    @cards.each { print '** ' }
+  def card_masked_names
+    @cards.map(&:name).join(' ').gsub(/\S/, '*')
   end
 end
