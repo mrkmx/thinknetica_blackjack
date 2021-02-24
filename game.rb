@@ -5,7 +5,7 @@ require_relative 'bank'
 require_relative 'deck'
 
 class Game
-  attr_reader :player, :dealer
+  attr_reader :player, :dealer, :users
 
   BASE_BET = 10
   MAX_CARDS = 3
@@ -27,30 +27,11 @@ class Game
     output
   end
 
-  def continue
-    over?
-    puts 'Продолжить? (y/n)'
-    input = gets.chomp
-    if input == 'y'
-      @users.each do |user|
-        user.remove_cards
-        user.remove_score
-      end
-      start
-    elsif input == 'n'
-      puts 'Завершение игры'
-      exit
-    else
-      puts 'Неизвестная команда'
-      continue
-    end
-  end
-
   def over?
     @users.each do |user|
       if user.money < BASE_BET
-        puts "#{user.name} не может сделать ставку, игра окончена"
-        exit
+        @client.output "#{user.name} не может сделать ставку, игра окончена"
+        exit # ToDo: как это будет работать с другими интерфейсами, кроме терминала?
       end
     end
   end
@@ -71,54 +52,54 @@ class Game
 
   def output
     @client.status
-    @client.user_actions
+    @client.menu_user_actions
   end
 
   def dealer_actions
-    puts '========================='
+    @client.output '========================='
     if @dealer.score >= DEALER_THRESHOLD
-      puts 'Дилер пропускает ход'
+      @client.output 'Дилер пропускает ход'
       winner if @dealer.score >= GAME_GOAL
     else
-      puts 'Дилер берет карту'
+      @client.output 'Дилер берет карту'
       @dealer.take_card @deck
       winner if max_cards? @dealer
     end
     output
-    puts '========================='
+    @client.output '========================='
   end
 
   def winner
     dealer_win
     player_win
     draw
-    continue
+    @client.menu_continue
   end
 
   def dealer_win
     return unless (@dealer.score <= GAME_GOAL && @dealer.score > @player.score) || @player.score > GAME_GOAL
 
-    puts "Победил #{@dealer.name}"
-    puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
-    puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
+    @client.output "Победил #{@dealer.name}"
+    @client.output "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+    @client.output "#{@player.name}: #{@player.score}, #{@player.card_names}"
     reward @dealer
   end
 
   def player_win
     return unless (@player.score <= GAME_GOAL && @player.score > @dealer.score) || @dealer.score > GAME_GOAL
 
-    puts "Победил #{@player.name}"
-    puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
-    puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+    @client.output "Победил #{@player.name}"
+    @client.output "#{@player.name}: #{@player.score}, #{@player.card_names}"
+    @client.output "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
     reward @player
   end
 
   def draw
     return unless @player.score == @dealer.score
 
-    puts 'Ничья'
-    puts "#{@player.name}: #{@player.score}, #{@player.card_names}"
-    puts "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+    @client.output 'Ничья'
+    @client.output "#{@player.name}: #{@player.score}, #{@player.card_names}"
+    @client.output "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
     reward @player, @dealer
   end
 
@@ -138,8 +119,8 @@ class Game
     begin
       raise 'Взято максимальное количество карт' if max_cards? @player
     rescue RuntimeError => e
-      puts e.message
-      user_actions
+      @client.output e.message
+      @client.menu_user_actions
     end
     @player.take_card @deck
     winner if @player.score >= GAME_GOAL

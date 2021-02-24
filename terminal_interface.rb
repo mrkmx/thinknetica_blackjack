@@ -21,7 +21,7 @@ class TerminalInterface
     puts '========================='
   end
 
-  def user_actions
+  def menu_user_actions
     if @game.max_cards? @game.player
       puts '1 - пропустить ход, 2 - показать карты'
     else
@@ -38,7 +38,30 @@ class TerminalInterface
       @game.take_player_card
     else
       puts 'Неизвестная команда'
-      user_actions
+      menu_user_actions
     end
+  end
+
+  def menu_continue
+    @game.over?
+    puts 'Продолжить? (y/n)'
+    input = gets.chomp
+    if input == 'y'
+      @game.users.each do |user|
+        user.remove_cards
+        user.remove_score
+      end
+      @game.start
+    elsif input == 'n'
+      puts 'Завершение игры'
+      exit
+    else
+      puts 'Неизвестная команда'
+      menu_continue
+    end
+  end
+
+  def output(str)
+    puts str
   end
 end
