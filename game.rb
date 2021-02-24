@@ -5,15 +5,15 @@ require_relative 'bank'
 require_relative 'deck'
 
 class Game
+  attr_reader :player, :dealer
+
   BASE_BET = 10
   MAX_CARDS = 3
   DEALER_THRESHOLD = 17
   GAME_GOAL = 21
 
-  def initialize
-    puts "Введите своё имя"
-    player_name = gets.chomp
-
+  def initialize(client, player_name)
+    @client = client
     @player = Player.new player_name
     @dealer = Player.new 'Дилер'
     @bank = Bank.new
@@ -70,18 +70,8 @@ class Game
   end
 
   def output
-    status
-    user_actions
-  end
-
-  def status
-    puts '========================='
-    puts "#{@player.name}: #{@player.card_names}"
-    puts "Очки: #{@player.score}, Деньги: #{@player.money}"
-    puts '========================='
-    puts "#{@dealer.name}: #{@dealer.card_masked_names}"
-    puts "Деньги: #{@dealer.money}"
-    puts '========================='
+    @client.status
+    @client.user_actions
   end
 
   def dealer_actions
@@ -141,27 +131,6 @@ class Game
     else # 1 победитель
       user[0].money = (user[0].money + @bank.money)
       @bank.money = 0
-    end
-  end
-
-  def user_actions
-    if max_cards? @player
-      puts '1 - пропустить ход, 2 - показать карты'
-    else
-      puts '1 - пропустить ход, 2 - показать карты, 3 - взять карту'
-    end
-
-    input = gets.chomp.to_i
-    case input
-    when 1
-      dealer_actions
-    when 2
-      winner
-    when 3
-      take_player_card
-    else
-      puts 'Неизвестная команда'
-      user_actions
     end
   end
 
