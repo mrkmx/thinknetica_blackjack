@@ -12,8 +12,7 @@ class Game
   DEALER_THRESHOLD = 17
   GAME_GOAL = 21
 
-  def initialize(client, player_name)
-    @client = client
+  def initialize(player_name)
     @player = Player.new player_name
     @dealer = Player.new 'Дилер'
     @bank = Bank.new
@@ -24,16 +23,6 @@ class Game
     @deck = Deck.new
     place_bets
     deal_cards
-    output
-  end
-
-  def over?
-    @users.each do |user|
-      if user.money < BASE_BET
-        @client.output "#{user.name} не может сделать ставку, игра окончена"
-        exit # TODO: как это будет работать с другими интерфейсами, кроме терминала?
-      end
-    end
   end
 
   def place_bets
@@ -50,57 +39,38 @@ class Game
     end
   end
 
-  def output
-    @client.status
-    @client.menu_user_actions
-  end
-
   def dealer_actions
-    @client.output '========================='
     if @dealer.score >= DEALER_THRESHOLD
-      @client.output 'Дилер пропускает ход'
-      winner if @dealer.score >= GAME_GOAL
+      'Дилер пропускает ход'
     else
-      @client.output 'Дилер берет карту'
       @dealer.take_card @deck
-      winner if max_cards? @dealer
+      'Дилер берет карту'
     end
-    output
-    @client.output '========================='
   end
 
   def winner
-    dealer_win
-    player_win
-    draw
-    @client.menu_continue
+    dealer_win || player_win || draw
   end
 
   def dealer_win
     return unless (@dealer.score <= GAME_GOAL && @dealer.score > @player.score) || @player.score > GAME_GOAL
-
-    @client.output "Победил #{@dealer.name}"
-    @client.output "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
-    @client.output "#{@player.name}: #{@player.score}, #{@player.card_names}"
+    
     reward @dealer
+    'dealer'
   end
 
   def player_win
     return unless (@player.score <= GAME_GOAL && @player.score > @dealer.score) || @dealer.score > GAME_GOAL
-
-    @client.output "Победил #{@player.name}"
-    @client.output "#{@player.name}: #{@player.score}, #{@player.card_names}"
-    @client.output "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+    
     reward @player
+    'player'
   end
 
   def draw
     return unless @player.score == @dealer.score
-
-    @client.output 'Ничья'
-    @client.output "#{@player.name}: #{@player.score}, #{@player.card_names}"
-    @client.output "#{@dealer.name}: #{@dealer.score}, #{@dealer.card_names}"
+    
     reward @player, @dealer
+    'draw'
   end
 
   def reward(*user)
@@ -116,18 +86,18 @@ class Game
   end
 
   def take_player_card
-    begin
-      raise 'Взято максимальное количество карт' if max_cards? @player
-    rescue RuntimeError => e
-      @client.output e.message
-      @client.menu_user_actions
-    end
     @player.take_card @deck
-    winner if @player.score >= GAME_GOAL
-    dealer_actions
   end
 
   def max_cards?(user)
     user.cards.length >= MAX_CARDS
+  end
+
+  def bankrupt?(user)
+    user.money < BASE_BET
+  end
+
+  def over?
+    @users.all? { |user| bankrupt?(user) || max_cards?(user) }
   end
 end
