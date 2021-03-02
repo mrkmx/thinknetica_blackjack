@@ -127,8 +127,9 @@ class TerminalInterface
   end
 
   def dealer_actions_view
+    response = @game.dealer_actions ? 'Дилер берет карту' : 'Дилер пропускает ход'
     puts '========================='
-    puts @game.dealer_actions
+    puts response
     puts '========================='
   end
 end

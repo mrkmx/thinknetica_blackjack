@@ -20,6 +20,7 @@ class Player
 
     @cards << card
     add_score card
+    card
   end
 
   def remove_cards

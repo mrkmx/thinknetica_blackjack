@@ -41,10 +41,9 @@ class Game
 
   def dealer_actions
     if @dealer.score >= DEALER_THRESHOLD
-      'Дилер пропускает ход'
+      nil
     else
       @dealer.take_card @deck
-      'Дилер берет карту'
     end
   end
 
