@@ -54,32 +54,29 @@ class Game
   def dealer_win
     return unless (@dealer.score <= GAME_GOAL && @dealer.score > @player.score) || @player.score > GAME_GOAL
     
-    reward @dealer
-    'dealer'
+    @dealer
   end
 
   def player_win
     return unless (@player.score <= GAME_GOAL && @player.score > @dealer.score) || @dealer.score > GAME_GOAL
     
-    reward @player
-    'player'
+    @player
   end
 
   def draw
     return unless @player.score == @dealer.score || (@player.score > GAME_GOAL && @dealer.score > GAME_GOAL)
     
-    reward @player, @dealer
-    'draw'
+    nil
   end
 
-  def reward(*user)
-    if user.length > 1 # Ничья
+  def reward(user)
+    if user.is_a? Array # Ничья, т.к пришел массив юзеров, вместо объекта класса Player
       user.each do |u|
         u.money = (u.money + BASE_BET)
         @bank.money = 0
       end
     else # 1 победитель
-      user[0].money = (user[0].money + @bank.money)
+      user.money = (user.money + @bank.money)
       @bank.money = 0
     end
   end

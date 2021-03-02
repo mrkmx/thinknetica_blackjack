@@ -88,25 +88,18 @@ class TerminalInterface
 
   def show_cards
     winner = @game.winner
-    case winner
-    when 'player'
-      player_win_view
-    when 'dealer'
-      dealer_win_view
-    when 'draw'
+    if winner
+      @game.reward winner
+      winner_view winner
+    else
+      @game.reward(@game.users)
       draw_view
     end
     menu_continue
   end
 
-  def dealer_win_view
-    puts "Победил #{@game.dealer.name}"
-    puts "#{@game.dealer.name}: #{@game.dealer.score}, #{@game.dealer.card_names}"
-    puts "#{@game.player.name}: #{@game.player.score}, #{@game.player.card_names}"
-  end
-
-  def player_win_view
-    puts "Победил #{@game.player.name}"
+  def winner_view(winner)
+    puts "Победил #{winner.name}"
     puts "#{@game.player.name}: #{@game.player.score}, #{@game.player.card_names}"
     puts "#{@game.dealer.name}: #{@game.dealer.score}, #{@game.dealer.card_names}"
   end
