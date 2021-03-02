@@ -67,7 +67,7 @@ class Game
   end
 
   def draw
-    return unless @player.score == @dealer.score
+    return unless @player.score == @dealer.score || (@player.score > GAME_GOAL && @dealer.score > GAME_GOAL)
     
     reward @player, @dealer
     'draw'
