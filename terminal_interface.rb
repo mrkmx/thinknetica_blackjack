@@ -53,22 +53,17 @@ class TerminalInterface
 
   def menu_continue
     @game.users.each do |user|
-      if @game.bankrupt? user
-        puts "#{user.name} не может сделать ставку, игра окончена"
-        puts 'Завершение игры'
-        exit
-      end
+      next unless @game.bankrupt? user
+
+      puts "#{user.name} не может сделать ставку, игра окончена"
+      puts 'Завершение игры'
+      exit
     end
-    
+
     puts 'Продолжить? (y/n)'
     input = gets.chomp
     if input == 'y'
-      @game.users.each do |user|
-        user.remove_cards
-        user.remove_score
-      end
-      @game.start
-      output
+      continue_game
     elsif input == 'n'
       puts 'Завершение игры'
       exit
@@ -78,11 +73,18 @@ class TerminalInterface
     end
   end
 
+  def continue_game
+    @game.users.each do |user|
+      user.remove_cards
+      user.remove_score
+    end
+    @game.start
+    output
+  end
+
   def skip_turn
     dealer_actions_view
-    if @game.over?
-      show_cards
-    end
+    show_cards if @game.over?
     output
   end
 
@@ -112,9 +114,7 @@ class TerminalInterface
 
   def take_card
     @game.take_player_card
-    if @game.over?
-      show_cards
-    end
+    show_cards if @game.over?
     dealer_actions_view
     output
   end

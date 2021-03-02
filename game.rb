@@ -53,19 +53,19 @@ class Game
 
   def dealer_win
     return unless (@dealer.score <= GAME_GOAL && @dealer.score > @player.score) || @player.score > GAME_GOAL
-    
+
     @dealer
   end
 
   def player_win
     return unless (@player.score <= GAME_GOAL && @player.score > @dealer.score) || @dealer.score > GAME_GOAL
-    
+
     @player
   end
 
   def draw
     return unless @player.score == @dealer.score || (@player.score > GAME_GOAL && @dealer.score > GAME_GOAL)
-    
+
     nil
   end
 
