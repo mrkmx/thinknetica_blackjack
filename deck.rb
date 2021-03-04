@@ -5,17 +5,14 @@ require_relative 'card'
 class Deck
   attr_reader :cards
 
-  RANKS = %w[2 3 4 5 6 7 8 9 10 J Q K A].freeze
-  SUITS = %w[♣ ♦ ♥ ♠].freeze
-
   def initialize
     @cards = []
     create
   end
 
   def create
-    RANKS.each do |rank|
-      SUITS.each do |suit|
+    Card::RANKS.each do |rank|
+      Card::SUITS.each do |suit|
         name = rank + suit
         score = card_score rank
         ace = ace? rank

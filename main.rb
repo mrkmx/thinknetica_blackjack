@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'game'
+require_relative 'terminal_interface'
 
-game = Game.new
-game.start
+TerminalInterface.new
